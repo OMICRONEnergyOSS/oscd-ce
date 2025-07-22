@@ -1,0 +1,102 @@
+name: Release Please
+
+on:
+  # push:
+  #   branches:
+  #     - main
+  workflow_dispatch:
+
+jobs:
+  # release-please:
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     release_created: ${{ steps.release.outputs.release_created }}
+  #   permissions:
+  #     contents: write
+  #     pull-requests: write
+  #     issues: write
+  #   steps:
+  #     - uses: googleapis/release-please-action@v4
+  #       id: release
+  #       with:
+  #         token: ${{ secrets.GITHUB_TOKEN }}
+  #         config-file: release-please-config.json
+  #         manifest-file: .release-please-manifest.json
+
+  gh-pages:
+    # needs: release-please
+    # if: ${{ needs.release-please.outputs.release_created }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ./.github/actions/setup-node-env
+
+      - name: Generate Documentation
+        run: npm run bundle
+
+      - name: Upload documentation artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  # Build is not working for MSI or NSIS. Cannot install wine-mono, fails everytime.
+  # Although somewhat old,  good resource to try would be:
+  # https://gist.github.com/jensmeder/96e258c48d7ef0b3e828a453c2fc667f
+  publish-installers:
+    # needs: release-please
+    # if: ${{ needs.release-please.outputs.release_created }}
+    name: Build electron installers and create release
+    runs-on: ubuntu-latest
+    container: electronuserland/builder:22-wine
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    env:
+      RELEASE_ASSETS: dist/*.exe dist/*.deb dist/*.rpm dist/*.AppImage
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Take container home folder ownership
+        # necessary to get Wine to work
+        run: chown root:root /github/home
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup GitHub CLI
+        uses: ./.github/actions/setup-github-cli
+
+      - name: Setup Node.js
+        uses: ./.github/actions/setup-node-env
+
+      - name: Showing wine environment
+        run: env | grep WINE
+
+      - name: Install mono
+        # run: wine msiexec /i https://dl.winehq.org/wine/wine-mono/7.3.0/wine-mono-7.3.0-x86.msi
+        run: wine msiexec /i https://dl.winehq.org/wine/wine-mono/10.1.0/wine-mono-10.1.0-x86.msi
+
+      - name: Build
+        run: npm run electron:build
+
+      - name: List created files
+        run: ls -la dist
+
+      - name: Upload installers to GitHub release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # run: gh release upload ${{ needs.release-please.outputs.tag_name }} ${{ env.RELEASE_ASSETS }}
+        run: gh release upload 0.0.0 ${{ env.RELEASE_ASSETS }} --clobber

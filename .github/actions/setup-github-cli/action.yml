@@ -1,0 +1,31 @@
+name: "Setup GitHub CLI"
+description: "GitHub CLI comes with the stock runner, but if you are using another runner, you may need to install it."
+
+runs:
+  using: composite
+  steps:
+    - name: Add Github respositors to apt
+      shell: bash
+      run: |
+        mkdir -p -m 755 /etc/apt/keyrings
+        out=$(mktemp)
+        wget -nv -O$out https://cli.github.com/packages/githubcli-archive-keyring.gpg
+        cat $out | tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null
+        chmod go+r /etc/apt/keyrings/githubcli-archive-keyring.gpg
+        mkdir -p -m 755 /etc/apt/sources.list.d
+        echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+
+    - name: Update apt with the new Repo
+      shell: bash
+      run: |
+        apt update
+
+    - name: Install GitHub CLI
+      shell: bash
+      run: |
+        apt install gh -y
+
+    - name: Check GitHub CLI version
+      shell: bash
+      run: |
+        gh --version
