@@ -17,7 +17,7 @@ export default [
       chunkFileNames: "[hash].js",
       assetFileNames: "[hash][extname]",
       format: "es",
-      dir: "dist",
+      dir: "bundle",
     },
     preserveEntrySignatures: true,
 
@@ -26,7 +26,7 @@ export default [
         targets: [
           {
             src: ["favicon.ico", "fonts"],
-            dest: "dist",
+            dest: "bundle",
           },
         ],
       }),
@@ -34,7 +34,7 @@ export default [
       html({
         minify: true,
         injectServiceWorker: true,
-        serviceWorkerPath: "dist/sw.js",
+        serviceWorkerPath: "bundle/sw.js",
       }),
       /** Resolve bare module imports */
       nodeResolve(),
@@ -81,9 +81,9 @@ export default [
       /** Create and inject a service worker */
       generateSW({
         // where to output the generated sw
-        swDest: path.join(".", "dist", "sw.js"),
+        swDest: path.join(".", "bundle", "sw.js"),
         // directory to match patterns against to be precached
-        globDirectory: "dist",
+        globDirectory: "bundle",
         // cache any html js and css by default
         globPatterns: [
           "index.*",

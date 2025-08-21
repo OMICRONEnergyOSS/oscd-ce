@@ -41,15 +41,6 @@
     "appId": "com.omicronenergy.openscd-ce",
     "artifactName": "${name}_${os}_${arch}_${version}.${ext}",
     "extends": "electron-builder.cjs",
-    "files": [
-      "dist/**",
-      "!dist/*-unpacked/**",
-      "!dist/oscd-cs_*",
-      "!dist/builder-*",
-      "main.js",
-      "preload.js",
-      "package.json"
-    ],
     "linux": {
       "icon": "build/icons/linux/icon.png",
       "target": [
@@ -62,7 +53,9 @@
     "win": {
       "icon": "build/icons/win/icon.ico",
       "target": [
-        "portable"
+        "nsis",
+        "portable",
+        "msi"
       ],
       "executableName": "OpenSCD-ce-alpha",
       "fileAssociations": [

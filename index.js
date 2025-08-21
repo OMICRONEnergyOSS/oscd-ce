@@ -23,7 +23,7 @@ if (isElectron) {
           bubbles: true,
           composed: true,
           detail: { doc, docName: fileName },
-        })
+        }),
       );
     } catch (err) {
       console.error("Error reading file:", err);
@@ -45,10 +45,10 @@ if (isElectron) {
             type: "zoom",
             direction: event.deltaY < 0 ? "in" : "out",
           },
-          "*"
+          "*",
         );
       }
     },
-    { passive: false }
+    { passive: false },
   );
 }

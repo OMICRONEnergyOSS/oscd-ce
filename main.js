@@ -41,7 +41,7 @@ function createWindow() {
     },
   });
 
-  mainWindow.loadFile(path.join(__dirname, "dist", "index.html"));
+  mainWindow.loadFile(path.join(__dirname, "bundle", "index.html"));
 
   mainWindow.webContents.on("before-input-event", (event, input) => {
     if (input.control && input.key.toLowerCase() === "i") {
