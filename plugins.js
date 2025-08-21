@@ -41,6 +41,49 @@ export const plugins = {
       requireDoc: true,
       src: "https://openenergytools.github.io/oscd-designer/oscd-designer.js",
     },
+    {
+      name: "Communication",
+      icon: "settings_ethernet",
+      active: true,
+      requireDoc: true,
+      src: "https://omicronenergyoss.github.io/oscd-editor-communication/oscd-editor-communication.js",
+    },
+
+    // {
+    //   name: "IED",
+    //   icon: "developer_board",
+    //   active: true,
+    //   requireDoc: true,
+    //   src: "https://omicronenergyoss.github.io/oscd-editor-ied/oscd-editor-ied.js",
+    // },
+    {
+      name: "Substation",
+      icon: "margin",
+      active: true,
+      requireDoc: true,
+      src: "https://omicronenergyoss.github.io/oscd-editor-substation/oscd-editor-substation.js",
+    },
+    {
+      name: "Template Editor",
+      icon: "copy_all",
+      active: true,
+      requireDoc: true,
+      src: "https://omicronenergyoss.github.io/oscd-editor-template/oscd-editor-template.js",
+    },
+    {
+      name: "Template Generator",
+      icon: "copy_all",
+      active: true,
+      requireDoc: true,
+      src: "https://omicronenergyoss.github.io/oscd-editor-template-generator/oscd-editor-template-generator.js",
+    },
+    {
+      name: "Template Update",
+      icon: "copy_all",
+      active: true,
+      requireDoc: true,
+      src: "https://omicronenergyoss.github.io/oscd-editor-template-update/oscd-editor-template-update.js",
+    },
   ],
   background: [
     {

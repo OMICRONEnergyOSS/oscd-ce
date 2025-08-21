@@ -1,14 +1,13 @@
 import "@omicronenergy/oscd-shell/oscd-shell.js";
 import { plugins } from "./plugins.js";
 
-const openScd = document.querySelector("oscd-shell");
+const oscdShell = document.querySelector("oscd-shell");
 
-openScd.plugins = plugins;
-console.log("Plugins loaded:", openScd.plugins);
+oscdShell.plugins = plugins;
 
 const params = new URL(document.location).searchParams;
 for (const [name, value] of params) {
-  openScd.setAttribute(name, value);
+  oscdShell.setAttribute(name, value);
 }
 
 const isElectron = !!window?.electronAPI;
@@ -24,7 +23,7 @@ if (isElectron) {
           bubbles: true,
           composed: true,
           detail: { doc, docName: fileName },
-        }),
+        })
       );
     } catch (err) {
       console.error("Error reading file:", err);
@@ -46,10 +45,10 @@ if (isElectron) {
             type: "zoom",
             direction: event.deltaY < 0 ? "in" : "out",
           },
-          "*",
+          "*"
         );
       }
     },
-    { passive: false },
+    { passive: false }
   );
 }
