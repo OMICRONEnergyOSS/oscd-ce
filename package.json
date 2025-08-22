@@ -141,7 +141,7 @@
     "lint-staged": "^16.1.5",
     "prettier": "^3.6.2",
     "rimraf": "^6.0.1",
-    "rollup": "^4.47.0",
+    "rollup": "^4.47.1",
     "rollup-plugin-copy": "^3.5.0",
     "rollup-plugin-workbox": "^8.1.2",
     "typescript": "^5.9.2"

@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
     permissions:
       contents: write
       pull-requests: write
@@ -82,12 +83,25 @@ jobs:
       - name: Setup Node.js
         uses: ./.github/actions/setup-node-env
 
+      - name: Set XDG_RUNTIME_DIR
+        run: |
+          mkdir -p /tmp/runtime-root
+          export XDG_RUNTIME_DIR=/tmp/runtime-root
+
       - name: Showing wine environment
         run: env | grep WINE
 
       # - name: Install mono
       # run: wine msiexec /i https://dl.winehq.org/wine/wine-mono/7.3.0/wine-mono-7.3.0-x86.msi
       # run: wine msiexec /i https://dl.winehq.org/wine/wine-mono/10.1.0/wine-mono-10.1.0-x86.msi
+
+      - name: Install Wine Mono
+        run: |
+          wget https://dl.winehq.org/wine/wine-mono/7.3.0/wine-mono-7.3.0-x86.msi
+          wine msiexec /i wine-mono-7.3.0-x86.msi
+
+      - name: Initialize Wine
+        run: wineboot
 
       - name: Create App Bundle
         run: npm run bundle
