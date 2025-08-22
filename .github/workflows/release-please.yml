@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
     permissions:
       contents: write
       pull-requests: write
@@ -60,7 +61,7 @@ jobs:
     if: ${{ needs.release-please.outputs.release_created }}
     name: Build electron installers and create release
     runs-on: ubuntu-latest
-    container: electronuserland/builder:22-wine-mono
+    container: electronuserland/builder:22-wine
     permissions:
       contents: write
       pages: write
